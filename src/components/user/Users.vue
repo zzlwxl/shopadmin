@@ -138,7 +138,7 @@ export default {
         mobile: [
           { required: true, message: '请输入手机号', trigger: 'blur' },
           { min: 11, max: 11, message: '手机号长度必须11字符', trigger: 'blur' },
-        ],
+        ]
       },
       setFromDataRules: {
         email: [
