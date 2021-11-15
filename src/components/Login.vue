@@ -40,6 +40,9 @@ export default {
       },
     }
   },
+  created(){
+      window.sessionStorage.clear()  
+  },
   methods: {
       resetLoginForm(){
           this.$refs.loginFormRef.resetFields()
@@ -48,9 +51,10 @@ export default {
         //   结合表单验证来使用
           this.$refs.loginFormRef.validate(async valid=>{
               if(valid===false)return
-            // await把promist对象简化成普通对象，
+            // await把promise对象简化成普通对象，
             // 因为普通对象真正的数据是里面的data，所以解构出来data并重命名为res
               const {data:res}= await this.$http.post("login",this.loginFrom)
+              console.log(res)
               if(res.meta.status!==200)return this.$message.error('登录失败')
               this.$message.success('登录成功')
               window.sessionStorage.setItem('token',res.data.token)
