@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <el-card>
       <el-row>
-        <el-button type="primary">添加角色</el-button>
+        <el-button @click="viewAddRoleDialog=true" type="primary">添加角色</el-button>
       </el-row>
       <el-table :data="rolesList" border stripe>
         <!-- 展开列 -->
@@ -23,7 +23,7 @@
               <!-- 二级三级权限 -->
               <el-col :span="19">
                 <!-- 二级 -->
-                <el-row :class="['bdbottom', index1 === 0 ? 'bgtop' : '', 'vcenter']" v-for="(item2, index2) in item1.children" :key="item2.id">
+                <el-row :class="['bdbottom', index1 === 0 ? 'bgtop' : '', 'vcenter']" v-for="(item2) in item1.children" :key="item2.id">
                   <el-col :span="6">
                     <el-tag closable type="success" @close="removeAskRightByIdById($event, { rolesRows, rightId: item2.id })">
                       {{ item2.authName }}
@@ -32,7 +32,7 @@
                   </el-col>
                   <!-- 三级 -->
                   <el-col :span="18">
-                    <el-tag @close="removeAskRightByIdById($event, { rolesRows, rightId: item3.id })" closable type="warning" v-for="(item3, index3) in item2.children" :key="item3.id">
+                    <el-tag @close="removeAskRightByIdById($event, { rolesRows, rightId: item3.id })" closable type="warning" v-for="(item3) in item2.children" :key="item3.id">
                       {{ item3.authName }}
                     </el-tag>
                   </el-col>
@@ -59,6 +59,20 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="viewSetRoleRightDialog = false">取 消</el-button>
         <el-button type="primary" @click="setRoleRightSub">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog @closed="addRolesClosed" title="添加角色" :visible.sync="viewAddRoleDialog" width="50%">
+      <el-form ref="addRolesRef" v-model="addRolesData" label-width="70px">
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input v-model="addRolesData.roleName"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" prop="roleDesc">
+          <el-input v-model="addRolesData.roleDesc"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="viewAddRoleDialog = false">取 消</el-button>
+        <el-button type="primary" @click="addRoleSub">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog @closed="setRolesDialogClosed" title="修改用户信息" :visible.sync="viewSetRolesDialog" width="50%">
@@ -90,6 +104,8 @@ export default {
       viewSetRolesDialog: false,
     //   控制编辑分配权限提示框的显示与隐藏
       viewSetRoleRightDialog:false,
+      // 控制添加角色提示框的显示与隐藏
+      viewAddRoleDialog:false,
       setRolesData: [],
       setRoleRightData:[],
     //   :treeProps根据:setRoleRightData的每一行进行树形渲染，即树形的属性绑定对象
@@ -97,6 +113,7 @@ export default {
           children:'children',
           label:'authName'
     },
+    addRolesData:[],
     // 默认选中的节点ID数组
     defKeys:[],
     //分配权限时的角色ID
@@ -196,6 +213,19 @@ export default {
         this.$message.success('更新成功')
         this.getRolesList()
         this.viewSetRoleRightDialog=false
+    },
+    async addRoleSub(){
+      this.viewAddRoleDialog=true
+      console.log(this.addRolesData)
+      const {data:res}= await this.$http.post('/roles',{roleName:this.addRolesData.roleName,roleDesc:this.addRolesData.roleDesc})
+      if(res.meta.status !== 201){
+        return this.$message.error('添加角色失败')
+      }
+      this.$message.success('添加角色成功')
+      this.viewAddRoleDialog=false
+    },
+    addRolesClosed(){
+      this.addRolesData=[]
     }
   },
 }
