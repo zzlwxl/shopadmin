@@ -23,7 +23,7 @@
               <!-- 二级三级权限 -->
               <el-col :span="19">
                 <!-- 二级 -->
-                <el-row :class="['bdbottom', index1 === 0 ? 'bgtop' : '', 'vcenter']" v-for="(item2, index2) in item1.children" :key="item2.id">
+                <el-row :class="['bdbottom', index1 === 0 ? 'bgtop' : '', 'vcenter']" v-for="(item2) in item1.children" :key="item2.id">
                   <el-col :span="6">
                     <el-tag closable type="success" @close="removeAskRightByIdById($event, { rolesRows, rightId: item2.id })">
                       {{ item2.authName }}
@@ -32,7 +32,7 @@
                   </el-col>
                   <!-- 三级 -->
                   <el-col :span="18">
-                    <el-tag @close="removeAskRightByIdById($event, { rolesRows, rightId: item3.id })" closable type="warning" v-for="(item3, index3) in item2.children" :key="item3.id">
+                    <el-tag @close="removeAskRightByIdById($event, { rolesRows, rightId: item3.id })" closable type="warning" v-for="(item3) in item2.children" :key="item3.id">
                       {{ item3.authName }}
                     </el-tag>
                   </el-col>
