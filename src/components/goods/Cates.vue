@@ -152,7 +152,6 @@ export default {
       selectdKeys: [],
       // 编辑对话框的显示和隐藏
       editCateDialogVisible: false,
-      editCateName: '',
       editCateId:''
     }
   },
@@ -253,7 +252,7 @@ export default {
       this.editCateDialogVisible = true
     },
     async editCataSub(){
-      const {data:res}= await this.$http.put(`categories/${this.editCateId}`,{cat_name:this.editCateName})
+      const {data:res}= await this.$http.put(`categories/${this.editCateId}`,{cat_name:this.editCateForm.cat_name})
       if(res.meta.status !== 200){
         console.log(res)
         return this.$message.error('修改失败')
