@@ -23,5 +23,5 @@ html,body,#app{
     font-size: 14px;
 }
 .ql-editor{
-    min-height: 300px;
+    min-height: 100px;
 }
