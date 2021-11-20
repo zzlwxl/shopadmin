@@ -8,6 +8,8 @@ import Rights from '@/components/right/Rights.vue'
 import Roles from '@/components/right/Roles.vue'
 import Cates from '@/components/goods/Cates.vue'
 import Params from '@/components/goods/Params.vue'
+import GoodsList from '@/components/goods/GoodsList.vue'
+import AddPage from '@/components/goods/AddPage.vue'
 Vue.use(Router)
 
 const router=new Router({
@@ -21,7 +23,9 @@ const router=new Router({
       {path:'/rights',component:Rights},
       {path:'/roles',component:Roles},
       {path:'/categories',component:Cates},
-      {path:'/params',component:Params}
+      {path:'/params',component:Params},
+      {path:'/goods',component:GoodsList},
+      {path:'/goods/add',component:AddPage},
     ]
   }
   ]
