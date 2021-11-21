@@ -11,6 +11,7 @@ import Params from '@/components/goods/Params.vue'
 import GoodsList from '@/components/goods/GoodsList.vue'
 import AddPage from '@/components/goods/AddPage.vue'
 import Order from '@/components/goods/Order.vue'
+import Report from '@/components/report/Report.vue'
 Vue.use(Router)
 
 const router=new Router({
@@ -28,6 +29,7 @@ const router=new Router({
       {path:'/goods',component:GoodsList},
       {path:'/goods/add',component:AddPage},
       {path:'/orders',component:Order},
+      {path:'/reports',component:Report},
     ]
   }
   ]
