@@ -262,7 +262,7 @@ export default {
     },
     // 删除分类
     async removeCate(id) {
-      const confirRustle = await this.$messageBox.confirm('此操作将永久删除该文件, 是否继续?', '删除分类', {
+      const confirRustle = await this.$confirm('此操作将永久删除该文件, 是否继续?', '删除分类', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

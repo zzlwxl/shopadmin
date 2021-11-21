@@ -162,8 +162,7 @@ export default {
       this.$message.success('删除角色成功')
     },
     async removeAskRightByIdById(e, roleAll) {
-      const removeAskResult = await this.$messageBox
-        .confirm('此操作将永久删除该权限, 是否继续?', '提示', {
+      const removeAskResult = await this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
@@ -222,6 +221,7 @@ export default {
         return this.$message.error('添加角色失败')
       }
       this.$message.success('添加角色成功')
+      this.getRolesList()
       this.viewAddRoleDialog=false
     },
     addRolesClosed(){

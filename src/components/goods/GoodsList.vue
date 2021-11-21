@@ -67,7 +67,6 @@
           </el-tab-pane>
           <el-tab-pane label="商品图片" >
             <el-upload :headers="headerObj" :file-list= "pics" :action="uploadURL" list-type="picture" >
-              <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
           <el-tab-pane label="商品内容">
@@ -148,8 +147,7 @@ export default {
       this.getGoodsList()
     },
     async removeById(id) {
-      const confirmResult = await this.$messageBox
-        .confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
@@ -177,7 +175,7 @@ export default {
       }
       console.log(res.data)
       res.data.pics.some((item) => {
-          this.pics.push({name:'这里老师没有写教程且没有正确的接口，所以只能实现到目前状态',url:`http://item.wangxuelong.vip:8888${item.pics_big}`})
+          this.pics.push({name:'',url:`http://item.wangxuelong.vip:8888${item.pics_big}`})
         })
       res.data.attrs.some((item) => {
           item.attr_vals = item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
