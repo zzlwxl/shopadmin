@@ -59,15 +59,24 @@
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品参数">
-            <el-form-item v-if="item.attr_sel !== 'only'"  :label="item.attr_name" v-for="item in editForm.attrs" :key="item.index">
+            <el-form-item   :label="item.attr_name" v-for="item in editForm.attrs" :key="item.index">
               <el-checkbox-group v-model="item.attr_vals">
                 <el-checkbox border v-for="(cb, i) in item.attr_vals" :key="i" :label="cb"></el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品图片" >
-            <el-upload :headers="headerObj" :file-list= "pics" :action="uploadURL" list-type="picture" >
-            </el-upload>
+           <el-upload
+  class="upload-demo"
+  :headers="headerObj" 
+  :action="uploadURL"
+  :on-preview="handlePreview"
+  :on-remove="handleRemove"
+  :file-list="editForm.pics"
+  :on-success="handleSuccess"
+  list-type="picture">
+  <el-button size="small" type="primary">点击上传</el-button>
+</el-upload>
           </el-tab-pane>
           <el-tab-pane label="商品内容">
             <quill-editor v-model="editForm.goods_introduce"></quill-editor>
@@ -81,6 +90,10 @@
     <el-button type="primary" @click="editSub()">确 定</el-button>
   </span>
 </el-dialog>
+
+  <el-dialog title="图片预览" :visible.sync="previewVisible" width="50%">
+      <img class="previewImg" :src="previewPath" alt="">
+    </el-dialog>
   </div>
 </template>
 
@@ -107,6 +120,7 @@ export default {
       },
       // 商品列表
       goodslist: [],
+        previewPath:'',
       editForm:{
         goods_name: '',
         goods_price: 0,
@@ -114,12 +128,13 @@ export default {
         goods_weight: 0,
          goods_introduce:'',
         // 商品详情的介绍
-         attrs:[]
+         attrs:[],
+        pics: [],
       },
+        previewVisible:false,
       goodId:'',
       editVisible:false,
       // 总数据条数
-        pics: [],
       total: 0,
     }
   },
@@ -145,6 +160,30 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.pagenum = newPage
       this.getGoodsList()
+    },
+    // 处理图片预览
+    handlePreview(file) {
+      console.log(file)
+    //   由于这里默认是本地服务器，所以可以替换成目标服务器即可
+      this.previewPath = file.url.replace('http://127.0.0.1', 'http://item.wangxuelong.vip')
+      console.log(this.previewPath)
+      this.previewVisible=true
+    },
+    handleRemove(file) {
+      console.log(file)
+      //   获取将要删除的图片的临时路径
+      const filePath = file.url
+      //   从表单中pics数组中，找到这个图片对应的索引值
+      const i = this.editForm.pics.findIndex((x) => x.pic === filePath)
+      //根据索引值把这个图片从表单中删除掉
+      this.editForm.pics.splice(i, 1)
+    },
+    // 监听图片上传成功的事件
+    handleSuccess(response) {
+      console.log(response)
+      const picInfo = { pic: response.data.tmp_path }
+      console.log(picInfo)
+      this.editForm.pics.push(picInfo)
     },
     async removeById(id) {
       const confirmResult = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -173,15 +212,19 @@ export default {
       if(res.meta.status !== 200){
         return this.$message.error('获取商品失败')
       }
-      console.log(res.data)
-      res.data.pics.some((item) => {
-          this.pics.push({name:'',url:`http://item.wangxuelong.vip:8888${item.pics_big}`})
-        })
-      res.data.attrs.some((item) => {
+      // console.log(res.data)
+      res.data.attrs.forEach((item) => {
           item.attr_vals = item.attr_vals.length === 0 ? [] : item.attr_vals.split(' ')
         })
       this.editForm=res.data
-console.log(this.pics)
+       this.editForm.pics=res.data.pics.map((item)=>{
+        return {name:'查看',url:`http://item.wangxuelong.vip:8888${item.pics_big}`}
+      })
+      // console.log(this.editForm.pics)
+      this.editForm.attrs=this.editForm.attrs.filter((item)=>{
+        return item.attr_name === '版式'
+      })
+console.log(this.editForm.attrs)
     },
     async editSub(){
       const {data:res}= await this.$http.put(`goods/${this.goodId}`,this.editForm)
@@ -193,7 +236,6 @@ console.log(this.pics)
       this.getGoodsList()
     },
     editClosed(){
-      this.pics=[]
       this.goodId=''
     }
   },
@@ -203,5 +245,8 @@ console.log(this.pics)
 <style lang="less" scope>
 .el-checkbox {
   margin: 0 10px 0 0 !important;
+}
+.previewImg{
+    width: 100%;
 }
 </style>

@@ -51,7 +51,12 @@
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane label="商品图片" name="4">
-            <el-upload :headers="headerObj" :action="uploadURL" :on-preview="handlePreview" :on-remove="handleRemove" list-type="picture" :on-success="handleSuccess">
+            <el-upload :headers="headerObj" 
+            :action="uploadURL"
+             :on-preview="handlePreview"
+              :on-remove="handleRemove" 
+              list-type="picture" 
+              :on-success="handleSuccess">
               <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
           </el-tab-pane>
@@ -186,7 +191,9 @@ export default {
     },
     // 监听图片上传成功的事件
     handleSuccess(response) {
+      console.log(response)
       const picInfo = { pic: response.data.tmp_path }
+      console.log(picInfo)
       this.addForm.pics.push(picInfo)
     },
     add(){

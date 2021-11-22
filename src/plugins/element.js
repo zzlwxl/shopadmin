@@ -38,7 +38,8 @@ import { Button,
     Checkbox,
     Upload,
     Timeline,
-    TimelineItem
+    TimelineItem,
+    Radio
 } from 'element-ui'
 
 Vue.use(Button)
@@ -79,6 +80,7 @@ Vue.use(Checkbox)
 Vue.use(Upload)
 Vue.use(Timeline)
 Vue.use(TimelineItem)
+Vue.use(Radio)
 Vue.prototype.$message=Message
 Vue.prototype.$messageBox=MessageBox
 
