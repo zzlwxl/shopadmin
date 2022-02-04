@@ -15,7 +15,7 @@ import NProgress from 'nprogress'
 
 Vue.config.productionTip = false
 // 请求根路径
-axios.defaults.baseURL='http://item.wangxuelong.vip:8888/api/private/v1/'
+axios.defaults.baseURL='http://elm.wangxuelong.vip:3008/api/private/v1/'
 
 // 在request拦截器中展示请求进度条 NProgress.start()
 // 通过axios请求拦截器添加token，保证用于获取数据的权限
